@@ -1,0 +1,214 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Base styles */
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    margin: 0;
+    min-height: 100vh;
+  }
+  
+  /* Focus styles for accessibility */
+  *:focus {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+/* Component styles */
+@layer components {
+  /* Button variants */
+  .btn-primary {
+    @apply bg-primary-600 text-white px-4 py-2 rounded-lg font-medium 
+           hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-in-out;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium 
+           hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-in-out;
+  }
+  
+  .btn-danger {
+    @apply bg-danger-600 text-white px-4 py-2 rounded-lg font-medium 
+           hover:bg-danger-700 focus:ring-2 focus:ring-danger-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-in-out;
+  }
+  
+  .btn-success {
+    @apply bg-secondary-600 text-white px-4 py-2 rounded-lg font-medium 
+           hover:bg-secondary-700 focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-in-out;
+  }
+  
+  /* Form input styles */
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg 
+           focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+           disabled:bg-gray-100 disabled:cursor-not-allowed
+           transition-all duration-200 ease-in-out;
+  }
+  
+  .input-error {
+    @apply border-danger-500 focus:ring-danger-500 focus:border-danger-500;
+  }
+  
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-xl shadow-soft border border-gray-200;
+  }
+  
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-200;
+  }
+  
+  .card-body {
+    @apply px-6 py-4;
+  }
+  
+  .card-footer {
+    @apply px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl;
+  }
+  
+  /* Alert styles */
+  .alert {
+    @apply p-4 rounded-lg border;
+  }
+  
+  .alert-info {
+    @apply bg-primary-50 border-primary-200 text-primary-800;
+  }
+  
+  .alert-success {
+    @apply bg-secondary-50 border-secondary-200 text-secondary-800;
+  }
+  
+  .alert-warning {
+    @apply bg-warning-50 border-warning-200 text-warning-800;
+  }
+  
+  .alert-error {
+    @apply bg-danger-50 border-danger-200 text-danger-800;
+  }
+  
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-600;
+  }
+  
+  /* Government service specific styles */
+  .gov-header {
+    @apply bg-gradient-to-r from-saffron via-white to-green text-navy;
+  }
+  
+  .gov-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-primary-100 text-primary-800;
+  }
+  
+  /* Accessibility improvements */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-primary-800;
+    }
+    
+    .input-field {
+      @apply border-2 border-gray-600;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply transition-none animate-none;
+    }
+  }
+}
+
+/* Utility styles */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  
+  /* Custom animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  /* Security indicator styles */
+  .security-high {
+    @apply text-secondary-600 bg-secondary-100;
+  }
+  
+  .security-medium {
+    @apply text-warning-600 bg-warning-100;
+  }
+  
+  .security-low {
+    @apply text-danger-600 bg-danger-100;
+  }
+}
+
+/* Print styles for government documents */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .card {
+    @apply shadow-none border border-black;
+  }
+}
