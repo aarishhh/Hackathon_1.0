@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import LoginForm from './components/LoginForm';
-import Dashboard from './components/Dashboard';
-import Hero from './components/Hero';
+import LoginForm from './components/auth/LoginForm';
+import Dashboard from './components/dashboard/Dashboard';
 
 export default function App() {
   // mode: 'insecure' | 'secure'
@@ -83,8 +82,6 @@ export default function App() {
       </header>
 
       <main className="main">
-        <Hero />
-
         {!token ? (
           <div className="panel">
             <h3 className="panel-title">Sign in to demo</h3>

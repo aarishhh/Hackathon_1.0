@@ -14,6 +14,7 @@ const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 // Secure auth routes and DB
 const authRoutes = require('./routes/auth');
+const authRoutesMemory = require('./routes/auth.memory');
 const DatabaseManager = require('./config/database');
 
 // -- Simple in-memory user store for demo only (replace with real DB) --
@@ -25,6 +26,7 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3000';
 const JWT_SECRET = process.env.JWT_SECRET || 'replace-me-with-secure-random-secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 const HTTPS_ENABLED = process.env.HTTPS_ENABLED === 'true'; // optional
+const DISABLE_DB = process.env.DISABLE_DB === 'true';
 const HTTPS_KEY = process.env.HTTPS_KEY || '';
 const HTTPS_CERT = process.env.HTTPS_CERT || '';
 
@@ -70,8 +72,8 @@ function maskSensitive(obj = {}, sensitiveFields = ['password']) {
 // Health
 app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
-// Mount secure auth routes
-app.use('/api/auth', authRoutes);
+// Mount secure auth routes only when DB is enabled
+app.use('/api/auth', DISABLE_DB ? authRoutesMemory : authRoutes);
 
 /**
  * Register - secure example
@@ -186,9 +188,7 @@ app.get('/api/profile', authenticateJwt, (req, res) => {
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 
 // ---- Start server (HTTP or optional HTTPS) ----
-// Start server only after DB connects
-DatabaseManager.connect()
-  .then(() => {
+function startHttpServers() {
     if (HTTPS_ENABLED && HTTPS_KEY && HTTPS_CERT) {
       try {
         const key = fs.readFileSync(path.resolve(HTTPS_KEY));
@@ -208,8 +208,17 @@ DatabaseManager.connect()
         }
       });
     }
-  })
-  .catch((err) => {
-    console.error('❌ Database connection failed. Server not started.', err);
-    process.exit(1);
-  });
+}
+
+if (DISABLE_DB) {
+  console.log('⚙️  Starting server with DISABLE_DB=true (no MongoDB connection).');
+  startHttpServers();
+} else {
+  // Start server only after DB connects
+  DatabaseManager.connect()
+    .then(() => startHttpServers())
+    .catch((err) => {
+      console.error('❌ Database connection failed. Server not started.', err);
+      process.exit(1);
+    });
+}

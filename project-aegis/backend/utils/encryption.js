@@ -9,10 +9,15 @@ class EncryptionService {
     this.saltLength = 32; // 256 bits
     this.tagLength = 16; // 128 bits
     
-    // Get encryption key from environment
+    // Get encryption key from environment or generate a demo key
     this.encryptionKey = process.env.AES_ENCRYPTION_KEY;
-    if (!this.encryptionKey || this.encryptionKey.length !== this.keyLength) {
-      console.warn('⚠️ AES encryption key not properly configured');
+    if (!this.encryptionKey) {
+      console.warn('⚠️ AES encryption key not configured. Generating demo key.');
+      this.encryptionKey = EncryptionService.generateKey();
+    }
+    if (this.encryptionKey.length !== 64) { // 32 bytes = 64 hex chars
+      console.warn('⚠️ AES encryption key length incorrect. Generating new key.');
+      this.encryptionKey = EncryptionService.generateKey();
     }
   }
 
